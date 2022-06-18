@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!--    These are for the datatables-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://datatables.net/media/css/site-examples.css">
+
+</head>
+<style>
+    .dataTables_paginate {
+        float: right !important;
+    }
+</style>
+<body>
+<div class="topnav">
+    <a class="active" th:href="@{/}">Home</a>
+    <a th:href="@{/person/add}">Add New Person</a>
+</div>
+<div style="float: right;padding: 15px">
+    <form th:action="@{/person/search}" method="get">
+        <input type="text" name="keyword" placeholder="Search by name,email or phone" size="50">
+        <button type="submit" class="btn btn-info">Search</button>
+    </form>
+</div>
+<div class="jumbotron jumbotron-fluid" style="background-color: ghostwhite">
+    <div class="container">
+        <h1 style="text-align: center; font-family: fantasy; font-size: 40px !important;margin-top: -20px;">Welcome to
+            Person Dashboard</h1>
+        <hr>
+        <table class="table table-bordered table-responsive-md" id="table_id2">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Date of birth</th>
+                <th>Email</th>
+                <th>Phone#</th>
+                <th>Profile Photo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="person : ${personsList}">
+                <td th:text="${person.id}"></td>
+                <td th:text="${person.fullName}"></td>
+                <td th:text="${person.dob}"></td>
+                <td th:text="${person.email}"></td>
+                <td th:text="${person.phoneNumber}"></td>
+                <td style="text-align: center">
+                    <img style="border-radius: 50%"
+                         th:src="${person.getPhotosImagePath()}"
+                         alt="Product Image" width="100px" height="100px"/>
+                </td>
+                <td>
+                    <a th:href="@{/person/delete/{id}(id=${person.id})}"
+                       class="btn btn-danger">Delete</a>
+                    <a th:href="@{/person/update/{id}(id=${person.id})}"
+                       class="btn btn-primary">Update</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table_id2').DataTable({
+            "dom": "tp",
+            "ordering": false,
+            "pagingType": "simple",
+            "lengthMenu": [5]
+        });
+    });
+</script>
+</body>
+</html>
